@@ -17,6 +17,7 @@ extern "C"
 #include "winfile.h"
 #include "treectl.h"
 #include "lfn.h"
+#include "resize.h"
 }
 
 void BuildDirectoryBagOValues(BagOValues<PDNODE> *pbov, LPTSTR szRoot, PDNODE pNode);
@@ -550,11 +551,17 @@ SetCurrentPathOfWindow(LPWSTR szPath)
 	}
 }
 
+PVOID pGotoDirDlgResizeState = NULL;
+
 INT_PTR
 GotoDirDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hwndEdit;
 	DWORD command_id;
+
+	if (ResizeDialogProc(hDlg, wMsg, wParam, lParam, &pGotoDirDlgResizeState)) {
+		return TRUE;
+	}
 
 	switch (wMsg)
 	{

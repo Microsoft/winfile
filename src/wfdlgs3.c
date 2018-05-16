@@ -13,6 +13,7 @@
 #include "lfn.h"
 #include "wfcopy.h"
 #include <shlobj.h>
+#include "resize.h"
 
 #define LABEL_NTFS_MAX 32
 #define LABEL_FAT_MAX  11
@@ -148,6 +149,7 @@ DoHelp:
    return TRUE;
 }
 
+PVOID pDiskLabelDlgResizeState = NULL;
 
 /*--------------------------------------------------------------------------*/
 /*                                                                          */
@@ -165,7 +167,9 @@ DiskLabelDlgProc(register HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
    DRIVE drive;
    INT i;
 
-   UNREFERENCED_PARAMETER(lParam);
+   if (ResizeDialogProc(hDlg, wMsg, wParam, lParam, &pDiskLabelDlgResizeState)) {
+      return TRUE;
+   }
 
    switch (wMsg) {
    case WM_INITDIALOG:
@@ -1532,6 +1536,8 @@ UpdateConnections(BOOL bUpdateDriveList)
 
 }
 
+PVOID pDrivesDlgResizeState = NULL;
+
 INT_PTR
 CALLBACK
 DrivesDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
@@ -1540,7 +1546,9 @@ DrivesDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
    INT iSel;
    HWND hwndActive;
 
-   UNREFERENCED_PARAMETER(lParam);
+   if (ResizeDialogProc(hDlg, wMsg, wParam, lParam, &pDrivesDlgResizeState)) {
+      return TRUE;
+   }
 
    switch (wMsg) {
    case WM_INITDIALOG:

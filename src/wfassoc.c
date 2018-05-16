@@ -12,6 +12,7 @@
 #include "winfile.h"
 #include "lfn.h"
 #include <commdlg.h>
+#include "resize.h"
 
 
 #define DDETYPECOMBOBOXSIZ 20
@@ -401,6 +402,7 @@ UpdateSelectionExt(HWND hDlg, BOOL bForce)
    ValidateClass(hDlg);
 }
 
+PVOID pAssociateDlgResizeState = NULL;
 
 //--------------------------------------------------------------------------
 //
@@ -419,6 +421,10 @@ AssociateDlgProc(register HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
    INT i;
    DWORD dwError;
    PEXT pExt, pExtNext;
+
+   if (ResizeDialogProc(hDlg, wMsg, wParam, lParam, &pAssociateDlgResizeState)) {
+      return TRUE;
+   }
 
    // Make sure szTemp is initialized.
    szTemp[0] = CHAR_NULL;
